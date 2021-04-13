@@ -15,6 +15,7 @@
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:gravity="center"
+        android:textColor="@color/purple_700"
         android:id="@+id/size_info"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
