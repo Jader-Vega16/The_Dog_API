@@ -8,6 +8,7 @@ import ni.uca.the_dog_api.retrofit.NetworkMapper
 import ni.uca.the_dog_api.room.CacheMapper
 import ni.uca.the_dog_api.room.DogDao
 import ni.uca.the_dog_api.utils.DataState
+import java.net.UnknownHostException
 
 class DogRepository constructor (
     private val dogDao: DogDao,
@@ -28,7 +29,18 @@ class DogRepository constructor (
             val cacheDog = dogDao.get()
             emit(DataState.Success(cacheMapper.mapFromEntityList(cacheDog)))
         }catch (e: Exception){
-            emit(DataState.Error(e))
+            when(e){
+
+                is UnknownHostException ->{
+                    val cacheDog = dogDao.get()
+                    if(cacheDog.isEmpty()){
+
+                        emit(DataState.Error(java.lang.Exception("Tabla perrito vacia,conectate  a internet para agregar datos en ella")))
+                    }else{
+                        emit(DataState.Success(cacheMapper.mapFromEntityList(cacheDog)))
+                    }
+                }
+            }
         }
     }
 }
